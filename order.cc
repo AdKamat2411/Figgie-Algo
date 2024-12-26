@@ -1,6 +1,6 @@
 #include "order.h"
 
-string Order::getCard() { return card; }
+int Order::getSuite() { return suite; }
 
 int Order::getDirection() { return direction; }
 

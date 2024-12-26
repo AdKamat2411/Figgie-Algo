@@ -1,16 +1,17 @@
 #include <iostream>
 #include <string>
+#include "player.h"
 
 using namespace std;
 
 class Order {
-    int player; // index of player in array of 4 players
+    Player player;
     float price;
     int direction; // 0 for bid and 1 for ask
-    string card;
+    int suite;
     public:
-        int getPlayer();
+        Player getPlayer();
         int getDirection();
         float getPrice();
-        string getCard();
+        int getSuite();
 };
