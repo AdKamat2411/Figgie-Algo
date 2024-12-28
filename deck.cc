@@ -24,22 +24,25 @@ void Deck::createFiggieDeck() {
     for (int suit = 0; suit < 4; ++suit) {
         std::cout << suitNames[suit] << ": " << suitCounts[suit] << " cards\n";
     }
+    for (auto card = cards.begin(); card != cards.end(); ++card) {
+        std::cout << card->suit;
+    }
     std::cout << std::endl;
 }
 
-void Deck::dealCards(std::vector<Player>& players) {
+void Deck::dealCards(std::vector<Player* >& players) {
     if (cards.empty()) {
         std::cerr << "Error: Deck is empty. Create and shuffle the deck first!" << std::endl;
         return;
     }
 
-    const int cardsPerPlayer = cards.size() / players.size();
+    cout << "Cards size: " << cards.size() << endl;
 
-    for (size_t i = 0; i < players.size(); ++i) {
-        for (int j = 0; j < cardsPerPlayer; ++j) {
-            const Card& card = cards[i * cardsPerPlayer + j];
-            players[i].addToSuite(card.suit);
-        }
+    int currPlayer = 0;
+    for (int i = 0; i < cards.size(); i++) {
+        int suit = cards[i].suit;
+        players[currPlayer]->addToSuite(suit);
+        currPlayer = (currPlayer + 1) % players.size();
     }
 }
 

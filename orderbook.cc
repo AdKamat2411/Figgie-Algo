@@ -3,7 +3,6 @@
 void orderBook::addOrder(Order* o) {
     float bestBid = getBestBidPrice();
     float bestAsk = getBestAskPrice();
-    cout << "Reached addOrder" << endl;
     int direction = o->getDirection();
     int orderPrice = o->getPrice();
     
@@ -13,9 +12,10 @@ void orderBook::addOrder(Order* o) {
             bids.emplace_back(o);
         } else if (orderPrice > bestBid && orderPrice >= bestAsk) {
             
-            if (o->getPlayer().getStack() > orderPrice && asks[0]->getPlayer().getSuiteCount(o->getSuite()) > 0) {
+            if (o->getPlayer()->getStack() > orderPrice && asks[0]->getPlayer()->getSuiteCount(o->getSuite()) > 0) {
                 // check if bidder has enough money to make trade and seller has inventory
                 executeTrade(o->getSuite(), orderPrice, o->getPlayer(), asks[0]->getPlayer());
+                asks[0]->getPlayer()->playerStatus();
                 // reset book
                 resetBook();
             }
@@ -28,9 +28,10 @@ void orderBook::addOrder(Order* o) {
             }
             else{
                 // check if bidder has enough money and seller has inventory
-                if (o->getPlayer().getStack() > orderPrice && asks[0]->getPlayer().getSuiteCount(o->getSuite()) > 0) {
+                if (bids[0]->getPlayer()->getStack() > orderPrice && o->getPlayer()->getSuiteCount(o->getSuite()) > 0) {
                     // execute trade, reset orderbook
                     executeTrade(o->getSuite(), bestBid, bids[0]->getPlayer(), o->getPlayer());
+                    o->getPlayer()->playerStatus();
                     resetBook();
                 }
             }
@@ -38,9 +39,9 @@ void orderBook::addOrder(Order* o) {
     }
 }
 
-void orderBook::deleteBid(Player& player) {
+void orderBook::deleteBid(Player* player) {
     for (auto it = bids.begin(); it != bids.end(); ++it) {
-        if ((*it)->getPlayer().getName() == player.getName()) {
+        if ((*it)->getPlayer()->getName() == player->getName()) {
             Order *deletingOrder = (*it);
             bids.erase(it);
             delete deletingOrder;
@@ -49,9 +50,9 @@ void orderBook::deleteBid(Player& player) {
 }
 
 
-void orderBook::deleteAsk(Player& player) {
+void orderBook::deleteAsk(Player* player) {
     for (auto it = asks.begin(); it != asks.end(); ++it) {
-        if ((*it)->getPlayer().getName() == player.getName()) {
+        if ((*it)->getPlayer()->getName() == player->getName()) {
             Order *deletingOrder = (*it);
             asks.erase(it);
             delete deletingOrder;
@@ -72,7 +73,7 @@ void orderBook::resetBook() {
 
 void orderBook::updateOrder(Order* o) {
     int direction = o->getDirection();
-    Player& player = o->getPlayer();
+    Player* player = o->getPlayer();
     if (direction == 0) {
         deleteBid(player);
         addOrder(o);
@@ -105,10 +106,21 @@ float orderBook::getBestAskPrice() {
 }
 
 
-void orderBook::executeTrade(int suite, int tradePrice, Player bidder, Player asker) {
-    bidder.addToSuite(suite);
-    asker.removeFromSuite(suite); 
-    bidder.removeFromStack(tradePrice);
-    asker.addToStack(tradePrice);
+void orderBook::executeTrade(int suite, int tradePrice, Player* bidder, Player* asker) {
+    bidder->addToSuite(suite);
+    asker->removeFromSuite(suite); 
+    bidder->removeFromStack(tradePrice);
+    asker->addToStack(tradePrice);
+}
+
+void orderBook::printBook() {
+    cout << "Bids: " << endl;
+    for (auto it: bids) {
+        cout << it->getPlayer()->getName() << " " << it->getPrice() << endl;
+    }
+    cout << "Asks: " << endl;
+    for (auto it: asks) {
+        cout << it->getPlayer()->getName() << " " << it->getPrice() << endl;
+    }
 }
 

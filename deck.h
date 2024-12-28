@@ -2,6 +2,7 @@
 #define DECK_H
 
 #include "player.h"
+#include <vector>
 
 struct Card {
     int suit;
@@ -13,7 +14,7 @@ class Deck {
 
     public:
         void createFiggieDeck();
-        void dealCards(std::vector<Player>& players);
+        void dealCards(std::vector<Player* >& players);
 };
 
 #endif // DECK_H
