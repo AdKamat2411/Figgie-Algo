@@ -1,3 +1,6 @@
+#ifndef ORDERBOOK_H
+#define ORDERBOOK_H
+
 #include <iostream>
 #include "order.h"
 #include "player.h"
@@ -9,12 +12,15 @@ class orderBook {
     std::vector<Order *> asks;
     public:
         void addOrder(Order* o);
-        void deleteBid(int player);
-        void deleteAsk(int player);
+        void deleteBid(Player& player);
+        void deleteAsk(Player& player);
         void resetBook();
         void updateOrder(Order* o);
         Order* getBestBid();
         Order* getBestAsk();
+        float getBestBidPrice();
+        float getBestAskPrice();
         void executeTrade(int suite, int tradePrice, Player bidder, Player asker);
 };
 
+#endif // ORDERBOOK_H

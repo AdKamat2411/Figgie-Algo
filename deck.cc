@@ -5,7 +5,7 @@
 #include <ctime>
 #include "deck.h"
 
-void createFiggieDeck() {
+void Deck::createFiggieDeck() {
     std::vector<int> suitCounts = {10, 10, 12, 8};
     std::mt19937 rng(static_cast<unsigned>(std::time(0)));
     std::shuffle(suitCounts.begin(), suitCounts.end(), rng);
@@ -27,7 +27,7 @@ void createFiggieDeck() {
     std::cout << std::endl;
 }
 
-void dealCards(std::vector<Player>& players) {
+void Deck::dealCards(std::vector<Player>& players) {
     if (cards.empty()) {
         std::cerr << "Error: Deck is empty. Create and shuffle the deck first!" << std::endl;
         return;
@@ -38,7 +38,7 @@ void dealCards(std::vector<Player>& players) {
     for (size_t i = 0; i < players.size(); ++i) {
         for (int j = 0; j < cardsPerPlayer; ++j) {
             const Card& card = cards[i * cardsPerPlayer + j];
-            players[i].suitCount[card.suit]++;
+            players[i].addToSuite(card.suit);
         }
     }
 }

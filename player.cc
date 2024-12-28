@@ -1,4 +1,7 @@
-#include "player.h";
+#include "player.h"
+#include <iostream>
+
+using namespace std;
 
 float Player::getStack() {
     return stack;
@@ -22,4 +25,16 @@ void Player::removeFromStack(float amount) {
 
 void Player::removeFromSuite(int index) {
     suiteCount[index]--;
+}
+
+string Player::getName() { return name; }
+
+void Player::playerStatus() {
+    cout << "Player Name: " << name << endl;
+    cout << "Stack: $" << stack << endl;
+    cout << "Suite Counts:" << endl;
+    cout << "  Spades: " << suiteCount[0] << endl;
+    cout << "  Clubs: " << suiteCount[1] << endl;
+    cout << "  Hearts: " << suiteCount[2] << endl;
+    cout << "  Diamonds: " << suiteCount[3] << endl;
 }

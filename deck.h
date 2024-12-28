@@ -1,8 +1,10 @@
+#ifndef DECK_H
+#define DECK_H
+
 #include "player.h"
 
-export struct Card {
+struct Card {
     int suit;
-    int rank;
 };
 
 class Deck {
@@ -14,4 +16,4 @@ class Deck {
         void dealCards(std::vector<Player>& players);
 };
 
-
+#endif // DECK_H

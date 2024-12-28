@@ -1,10 +1,12 @@
 #include "orderbook.h"
 
 void orderBook::addOrder(Order* o) {
-    float bestBid = getBestBid()->getPrice();
-    float bestAsk = getBestAsk()->getPrice();
+    float bestBid = getBestBidPrice();
+    float bestAsk = getBestAskPrice();
+    cout << "Reached addOrder" << endl;
     int direction = o->getDirection();
     int orderPrice = o->getPrice();
+    
     
     if (direction == 0) { // bid
         if (orderPrice > bestBid && orderPrice < bestAsk) {
@@ -36,9 +38,9 @@ void orderBook::addOrder(Order* o) {
     }
 }
 
-void orderBook::deleteBid(int player) {
+void orderBook::deleteBid(Player& player) {
     for (auto it = bids.begin(); it != bids.end(); ++it) {
-        if ((*it)->getPlayer() == player) {
+        if ((*it)->getPlayer().getName() == player.getName()) {
             Order *deletingOrder = (*it);
             bids.erase(it);
             delete deletingOrder;
@@ -47,9 +49,9 @@ void orderBook::deleteBid(int player) {
 }
 
 
-void orderBook::deleteAsk(int player) {
+void orderBook::deleteAsk(Player& player) {
     for (auto it = asks.begin(); it != asks.end(); ++it) {
-        if ((*it)->getPlayer() == player) {
+        if ((*it)->getPlayer().getName() == player.getName()) {
             Order *deletingOrder = (*it);
             asks.erase(it);
             delete deletingOrder;
@@ -70,7 +72,7 @@ void orderBook::resetBook() {
 
 void orderBook::updateOrder(Order* o) {
     int direction = o->getDirection();
-    int player = o->getPrice();
+    Player& player = o->getPlayer();
     if (direction == 0) {
         deleteBid(player);
         addOrder(o);
@@ -85,6 +87,23 @@ void orderBook::updateOrder(Order* o) {
 Order* orderBook::getBestBid() { return bids[0]; }
 
 Order* orderBook::getBestAsk() { return asks[0]; }
+
+float orderBook::getBestBidPrice() {
+    if (!bids.empty()) {
+        return bids[0]->getPrice();
+    } else {
+        return -1;  // Or some default value indicating no bids
+    }
+}
+
+float orderBook::getBestAskPrice() {
+    if (!asks.empty()) {
+        return asks[0]->getPrice();
+    } else {
+        return 100000000;  // Or some default value indicating no asks
+    }
+}
+
 
 void orderBook::executeTrade(int suite, int tradePrice, Player bidder, Player asker) {
     bidder.addToSuite(suite);
