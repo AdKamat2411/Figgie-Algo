@@ -4,7 +4,7 @@ void orderBook::addOrder(Order* o) {
     float bestBid = getBestBidPrice();
     float bestAsk = getBestAskPrice();
     int direction = o->getDirection();
-    int orderPrice = o->getPrice();
+    float orderPrice = o->getPrice();
     
     
     if (direction == 0) { // bid
@@ -15,7 +15,8 @@ void orderBook::addOrder(Order* o) {
             if (o->getPlayer()->getStack() > orderPrice && asks[0]->getPlayer()->getSuiteCount(o->getSuite()) > 0) {
                 // check if bidder has enough money to make trade and seller has inventory
                 executeTrade(o->getSuite(), orderPrice, o->getPlayer(), asks[0]->getPlayer());
-                asks[0]->getPlayer()->playerStatus();
+                // asks[0]->getPlayer()->playerStatus();
+                cout << asks[0]->getPlayer()->getName() << " sold 1 " << o->getSuite() << " to " << o->getPlayer()->getName() << endl;
                 // reset book
                 resetBook();
             }
@@ -25,13 +26,14 @@ void orderBook::addOrder(Order* o) {
         if (orderPrice < bestAsk) {
             if (orderPrice > bestBid) {
                 asks.emplace_back(o);
-            }
+            } 
             else{
                 // check if bidder has enough money and seller has inventory
                 if (bids[0]->getPlayer()->getStack() > orderPrice && o->getPlayer()->getSuiteCount(o->getSuite()) > 0) {
                     // execute trade, reset orderbook
                     executeTrade(o->getSuite(), bestBid, bids[0]->getPlayer(), o->getPlayer());
-                    o->getPlayer()->playerStatus();
+                    // o->getPlayer()->playerStatus();
+                    cout << o->getPlayer()->getName() << " sold 1 " << o->getSuite() << " to " << bids[0]->getPlayer()->getName() << endl;
                     resetBook();
                 }
             }
@@ -85,13 +87,13 @@ void orderBook::updateOrder(Order* o) {
 
 
 
-Order* orderBook::getBestBid() { return bids[0]; }
+Order* orderBook::getBestBid() { return bids.back(); }
 
-Order* orderBook::getBestAsk() { return asks[0]; }
+Order* orderBook::getBestAsk() { return asks.back(); }
 
 float orderBook::getBestBidPrice() {
     if (!bids.empty()) {
-        return bids[0]->getPrice();
+        return bids.back()->getPrice();
     } else {
         return -1;  // Or some default value indicating no bids
     }
@@ -99,7 +101,7 @@ float orderBook::getBestBidPrice() {
 
 float orderBook::getBestAskPrice() {
     if (!asks.empty()) {
-        return asks[0]->getPrice();
+        return asks.back()->getPrice();
     } else {
         return 100000000;  // Or some default value indicating no asks
     }

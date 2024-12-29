@@ -1,5 +1,6 @@
 #include "deck.h"
 #include "orderbook.h"
+#include "noisy.h"
 #include <iostream>
 #include <random>
 
@@ -11,7 +12,7 @@ int main() {
     const float lambda = 0.25;
 
     Player* p1 = new Player("p1");
-    Player* p2 = new Player("p2");
+    Noisy* p2 = new Noisy("p2");
 
     Deck newDeck = Deck();
 
@@ -21,7 +22,7 @@ int main() {
 
     newDeck.dealCards(players);
 
-    orderBook heart;
+    std::vector<orderBook*> books = {new orderBook(), new orderBook(), new orderBook(), new orderBook()};
 
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -40,16 +41,17 @@ int main() {
             eventCount++;
             p1look += expDist(gen);
             Order* o1 = new Order(p1, 2, 0, 2); 
-            heart.addOrder(o1);
+            books[2]->addOrder(o1);
             // p1.strategy();
         }
         if (currentTime >= p2look) {
-            // Player 1 looks at the market
+            // Player 2 looks at the market
             eventCount++;
             p2look += expDist(gen);
-            Order* o2 = new Order(p2, 2, 1, 2);
-            heart.addOrder(o2);
-            // p1.strategy();
+            // Order* o2 = new Order(p2, 2, 1, 2);
+            // heart.addOrder(o2);
+            p2->strategy(books);
+            books[2]->printBook();
         }
         currentTime += 0.01;
         

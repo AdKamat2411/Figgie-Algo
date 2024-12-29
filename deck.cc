@@ -24,9 +24,6 @@ void Deck::createFiggieDeck() {
     for (int suit = 0; suit < 4; ++suit) {
         std::cout << suitNames[suit] << ": " << suitCounts[suit] << " cards\n";
     }
-    for (auto card = cards.begin(); card != cards.end(); ++card) {
-        std::cout << card->suit;
-    }
     std::cout << std::endl;
 }
 

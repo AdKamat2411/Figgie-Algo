@@ -8,13 +8,13 @@ CXXFLAGS = -Wall -std=c++17 -g
 OUTPUT = figgie
 
 # Source files
-SRCS = main.cc deck.cc order.cc orderbook.cc player.cc
+SRCS = main.cc deck.cc order.cc orderbook.cc player.cc noisy.cc
 
 # Object files
 OBJS = $(SRCS:.cc=.o)
 
 # Header files
-HEADERS = deck.h order.h orderbook.h player.h
+HEADERS = deck.h order.h orderbook.h player.h noisy.h
 
 # Default target
 all: $(OUTPUT)
