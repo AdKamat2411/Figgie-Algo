@@ -12,7 +12,8 @@ void orderBook::addOrder(Order* o) {
             bids.emplace_back(o);
         } else if (orderPrice > bestBid && orderPrice >= bestAsk) {
             
-            if (o->getPlayer()->getStack() > orderPrice && asks.back()->getPlayer()->getSuiteCount(o->getSuite()) > 0) {
+            if (o->getPlayer()->getStack() > orderPrice && asks.back()->getPlayer()->getSuiteCount(o->getSuite()) > 0 && 
+                (asks.back()->getPlayer()->getName() != o->getPlayer()->getName())) {
                 // check if bidder has enough money to make trade and seller has inventory
                 executeTrade(o->getSuite(), orderPrice, o->getPlayer(), asks.back()->getPlayer());
                 // asks[0]->getPlayer()->playerStatus();
@@ -32,7 +33,8 @@ void orderBook::addOrder(Order* o) {
             } 
             else{
                 // check if bidder has enough money and seller has inventory
-                if (bids[0]->getPlayer()->getStack() > orderPrice && o->getPlayer()->getSuiteCount(o->getSuite()) > 0) {
+                if (bids.back()->getPlayer()->getStack() > orderPrice && o->getPlayer()->getSuiteCount(o->getSuite()) > 0 && 
+                    (bids.back()->getPlayer()->getName() != o->getPlayer()->getName())) {
                     // execute trade, reset orderbook
                     executeTrade(o->getSuite(), bestBid, bids.back()->getPlayer(), o->getPlayer());
                     // o->getPlayer()->playerStatus();

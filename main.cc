@@ -9,11 +9,11 @@ using namespace std;
 
 int main() {
     int eventCount = 0;
-    const int maxEvents = 100;
+    const int maxEvents = 10000;
     const float lambda = 0.25;
 
-    EVtrader* p1 = new EVtrader("p1");
-    EVtrader* p2 = new EVtrader("p2");
+    Noisy* p1 = new Noisy("p1");
+    Noisy* p2 = new Noisy("p2");
     EVtrader* p3 = new EVtrader("p3");
     EVtrader* p4 = new EVtrader("p4");
 
@@ -47,7 +47,7 @@ int main() {
             // Player 1 looks at the market
             eventCount++;
             p1look += expDist(gen);
-            p1->strategy(books, players);
+            p1->strategy(books);
         }
         if (currentTime >= p2look) {
             // Player 2 looks at the market
@@ -55,7 +55,7 @@ int main() {
             p2look += expDist(gen);
             // Order* o2 = new Order(p2, 2, 1, 2);
             // books[2]->addOrder(o2);
-            p2->strategy(books, players);
+            p2->strategy(books);
         }
         if (currentTime >= p3look) {
             // Player 2 looks at the market
