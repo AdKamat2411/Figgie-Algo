@@ -1,6 +1,7 @@
 #include "deck.h"
 #include "orderbook.h"
 #include "noisy.h"
+#include "EVtrader.h"
 #include <iostream>
 #include <random>
 
@@ -11,18 +12,20 @@ int main() {
     const int maxEvents = 100;
     const float lambda = 0.25;
 
-    Player* p1 = new Player("p1");
-    Noisy* p2 = new Noisy("p2");
+    EVtrader* p1 = new EVtrader("p1");
+    EVtrader* p2 = new EVtrader("p2");
+    EVtrader* p3 = new EVtrader("p3");
+    EVtrader* p4 = new EVtrader("p4");
 
     Deck newDeck = Deck();
 
     newDeck.createFiggieDeck();
 
-    std::vector<Player* > players = {p1, p2};
+    std::vector<Player* > players = {p1, p2, p3, p4};
 
     newDeck.dealCards(players);
 
-    std::vector<orderBook*> books = {new orderBook(), new orderBook(), new orderBook(), new orderBook()};
+    std::vector<orderBook*> books = {new orderBook(0), new orderBook(1), new orderBook(2), new orderBook(3)};
 
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -30,34 +33,57 @@ int main() {
 
     float p1look = expDist(gen);
     float p2look = expDist(gen);
+    float p3look = expDist(gen);
+    float p4look = expDist(gen);
     float currentTime = 0.0;
 
     p1->playerStatus();
     p2->playerStatus();
+    p3->playerStatus();
+    p4->playerStatus();
 
     while (eventCount < maxEvents) {
         if (currentTime >= p1look) {
             // Player 1 looks at the market
             eventCount++;
             p1look += expDist(gen);
-            Order* o1 = new Order(p1, 2, 0, 2); 
-            books[2]->addOrder(o1);
-            // p1.strategy();
+            p1->strategy(books, players);
         }
         if (currentTime >= p2look) {
             // Player 2 looks at the market
             eventCount++;
             p2look += expDist(gen);
             // Order* o2 = new Order(p2, 2, 1, 2);
+            // books[2]->addOrder(o2);
+            p2->strategy(books, players);
+        }
+        if (currentTime >= p3look) {
+            // Player 2 looks at the market
+            eventCount++;
+            p3look += expDist(gen);
+            // Order* o2 = new Order(p2, 2, 1, 2);
             // heart.addOrder(o2);
-            p2->strategy(books);
-            books[2]->printBook();
+            p3->strategy(books, players);
+        }
+        if (currentTime >= p4look) {
+            // Player 2 looks at the market
+            eventCount++;
+            p4look += expDist(gen);
+            // Order* o2 = new Order(p2, 2, 1, 2);
+            // heart.addOrder(o2);
+            p4->strategy(books, players);
+            // for (int i = 0; i < 4; i++) {
+            //     cout << "Book is " << i << endl;
+            //     books[i]->printBook();
+            // }
         }
         currentTime += 0.01;
         
     }
     p1->playerStatus();
     p2->playerStatus();
+    p3->playerStatus();
+    p4->playerStatus();
     return 0;
 }
 

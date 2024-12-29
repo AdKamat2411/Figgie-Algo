@@ -38,3 +38,14 @@ void Player::playerStatus() {
     cout << "  Hearts: " << suiteCount[2] << endl;
     cout << "  Diamonds: " << suiteCount[3] << endl;
 }
+
+
+void Player::addToIntial(int index) {
+    intialCount[index]++;
+}
+
+
+float Player::getIntialCount(int index) {
+    return intialCount[index];
+}
+

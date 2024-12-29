@@ -7,6 +7,7 @@
 
 using namespace std;
 
+
 class Order {
     Player* player;
     float price;

@@ -12,11 +12,14 @@ void orderBook::addOrder(Order* o) {
             bids.emplace_back(o);
         } else if (orderPrice > bestBid && orderPrice >= bestAsk) {
             
-            if (o->getPlayer()->getStack() > orderPrice && asks[0]->getPlayer()->getSuiteCount(o->getSuite()) > 0) {
+            if (o->getPlayer()->getStack() > orderPrice && asks.back()->getPlayer()->getSuiteCount(o->getSuite()) > 0) {
                 // check if bidder has enough money to make trade and seller has inventory
-                executeTrade(o->getSuite(), orderPrice, o->getPlayer(), asks[0]->getPlayer());
+                executeTrade(o->getSuite(), orderPrice, o->getPlayer(), asks.back()->getPlayer());
                 // asks[0]->getPlayer()->playerStatus();
-                cout << asks[0]->getPlayer()->getName() << " sold 1 " << o->getSuite() << " to " << o->getPlayer()->getName() << endl;
+                if (asks.back()->getPlayer()->getName() != o->getPlayer()->getName()) {
+                    cout << asks.back()->getPlayer()->getName() << " sold 1 " << o->getSuite() << " to " << o->getPlayer()->getName() << " at " << orderPrice << endl;
+                }
+                
                 // reset book
                 resetBook();
             }
@@ -31,9 +34,11 @@ void orderBook::addOrder(Order* o) {
                 // check if bidder has enough money and seller has inventory
                 if (bids[0]->getPlayer()->getStack() > orderPrice && o->getPlayer()->getSuiteCount(o->getSuite()) > 0) {
                     // execute trade, reset orderbook
-                    executeTrade(o->getSuite(), bestBid, bids[0]->getPlayer(), o->getPlayer());
+                    executeTrade(o->getSuite(), bestBid, bids.back()->getPlayer(), o->getPlayer());
                     // o->getPlayer()->playerStatus();
-                    cout << o->getPlayer()->getName() << " sold 1 " << o->getSuite() << " to " << bids[0]->getPlayer()->getName() << endl;
+                    if (bids.back()->getPlayer()->getName() != o->getPlayer()->getName()) {
+                        cout << o->getPlayer()->getName() << " sold 1 " << o->getSuite() << " to " << bids.back()->getPlayer()->getName() << " at " << bestBid << endl;
+                    }
                     resetBook();
                 }
             }
@@ -113,6 +118,7 @@ void orderBook::executeTrade(int suite, int tradePrice, Player* bidder, Player* 
     asker->removeFromSuite(suite); 
     bidder->removeFromStack(tradePrice);
     asker->addToStack(tradePrice);
+    tradeLog.emplace_back(bidder, asker, suite, tradePrice);
 }
 
 void orderBook::printBook() {
@@ -125,4 +131,6 @@ void orderBook::printBook() {
         cout << it->getPlayer()->getName() << " " << it->getPrice() << endl;
     }
 }
+
+std::vector<Trade> orderBook::getTrades() { return tradeLog; }
 

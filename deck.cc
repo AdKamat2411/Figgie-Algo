@@ -39,6 +39,7 @@ void Deck::dealCards(std::vector<Player* >& players) {
     for (int i = 0; i < cards.size(); i++) {
         int suit = cards[i].suit;
         players[currPlayer]->addToSuite(suit);
+        players[currPlayer]->addToIntial(suit);
         currPlayer = (currPlayer + 1) % players.size();
     }
 }
