@@ -5,11 +5,21 @@
 #include <ctime>
 #include "deck.h"
 
-void Deck::createFiggieDeck() {
+int Deck::createFiggieDeck() {
     std::vector<int> suitCounts = {10, 10, 12, 8};
     std::mt19937 rng(static_cast<unsigned>(std::time(0)));
     std::shuffle(suitCounts.begin(), suitCounts.end(), rng);
 
+    int goalSuit = -1;
+    for (int i = 0; i < 4; ++i) {
+        if (suitCounts[i] == 12) {
+            if (i % 2 == 0) {
+                goalSuit = i + 1;
+            } else {
+                goalSuit = i - 1;
+            }
+        }
+    }
     cards.clear();
 
     for (int suit = 0; suit < 4; ++suit) {
@@ -25,6 +35,7 @@ void Deck::createFiggieDeck() {
         std::cout << suitNames[suit] << ": " << suitCounts[suit] << " cards\n";
     }
     std::cout << std::endl;
+    return goalSuit;
 }
 
 void Deck::dealCards(std::vector<Player* >& players) {

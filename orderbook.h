@@ -16,12 +16,10 @@ struct Trade {
 };
 
 class orderBook {
-    int suite;
     std::vector<Order *> bids;
     std::vector<Order *> asks;
     std::vector<Trade> tradeLog;
     public:
-        orderBook(int suite): suite(suite) {}
         void addOrder(Order* o);
         void deleteBid(Player* player);
         void deleteAsk(Player* player);

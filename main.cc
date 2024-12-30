@@ -19,13 +19,13 @@ int main() {
 
     Deck newDeck = Deck();
 
-    newDeck.createFiggieDeck();
+    int goalSuit = newDeck.createFiggieDeck();
 
     std::vector<Player* > players = {p1, p2, p3, p4};
 
     newDeck.dealCards(players);
 
-    std::vector<orderBook*> books = {new orderBook(0), new orderBook(1), new orderBook(2), new orderBook(3)};
+    std::vector<orderBook*> books = {new orderBook(), new orderBook(), new orderBook(), new orderBook()};
 
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -41,6 +41,13 @@ int main() {
     p2->playerStatus();
     p3->playerStatus();
     p4->playerStatus();
+
+    float pot = 0.0;
+    for (int i = 0; i < 4; i++) {
+        players[i]->removeFromStack(50.0);
+    }
+    pot += 200.0;
+    cout << "Pot is " << pot << endl;
 
     while (eventCount < maxEvents) {
         if (currentTime >= p1look) {
@@ -79,6 +86,25 @@ int main() {
         }
         currentTime += 0.01;
         
+    }
+    std::cout << "Goal suit is " << goalSuit << std::endl;
+    int majorityOwnerVal = 0;
+    for (int i = 0; i < 4; i++) {
+        int goalSuiteCount = players[i]->getSuiteCount(goalSuit);
+        if (goalSuiteCount > majorityOwnerVal) {
+            majorityOwnerVal = goalSuiteCount;
+        }
+        players[i]->addToStack(10*players[i]->getSuiteCount(goalSuit));
+        pot -= 10*players[i]->getSuiteCount(goalSuit);
+    }
+    std::vector<int> majorityOwners;
+    for (int i = 0; i < 4; i++) {
+        if (players[i]->getSuiteCount(goalSuit) == majorityOwnerVal) {
+            majorityOwners.push_back(i);
+        }
+    }
+    for (int i = 0; i < majorityOwners.size(); i++) {
+        players[majorityOwners[i]]->addToStack(pot/majorityOwners.size());
     }
     p1->playerStatus();
     p2->playerStatus();

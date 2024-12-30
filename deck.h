@@ -13,7 +13,7 @@ class Deck {
         std::vector<Card> cards;
 
     public:
-        void createFiggieDeck();
+        int createFiggieDeck();
         void dealCards(std::vector<Player* >& players);
 };
 
