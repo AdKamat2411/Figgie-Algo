@@ -33,7 +33,7 @@ void orderBook::addOrder(Order* o) {
             } 
             else{
                 // check if bidder has enough money and seller has inventory
-                if (bids.back()->getPlayer()->getStack() > orderPrice && o->getPlayer()->getSuiteCount(o->getSuite()) > 0 && 
+                if (bids.back()->getPlayer()->getStack() > bestBid && o->getPlayer()->getSuiteCount(o->getSuite()) > 0 && 
                     (bids.back()->getPlayer()->getName() != o->getPlayer()->getName())) {
                     // execute trade, reset orderbook
                     executeTrade(o->getSuite(), bestBid, bids.back()->getPlayer(), o->getPlayer());
@@ -115,7 +115,7 @@ float orderBook::getBestAskPrice() {
 }
 
 
-void orderBook::executeTrade(int suite, int tradePrice, Player* bidder, Player* asker) {
+void orderBook::executeTrade(int suite, float tradePrice, Player* bidder, Player* asker) {
     bidder->addToSuite(suite);
     asker->removeFromSuite(suite); 
     bidder->removeFromStack(tradePrice);
