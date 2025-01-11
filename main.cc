@@ -1,10 +1,10 @@
-#include "deck.h"
-#include "orderbook.h"
-#include "noisy.h"
-#include "EVtrader.h"
+#include "../Mechanics/deck.h"
+#include "../Mechanics/orderbook.h"
+#include "Agents/noisy.h"
+#include "Agents/EVtrader.h"
 #include <iostream>
 #include <random>
-#include "bottomFeeder.h"
+#include "Agents/bottomFeeder.h"
 
 using namespace std;
 
@@ -13,12 +13,13 @@ int main() {
     const int maxEvents = 10000;
     const float lambda = 0.25;
 
-    // Noisy* p1 = new Noisy("p1");
-    // Noisy* p2 = new Noisy("p2");
-    bottomFeeder* p1 = new bottomFeeder("p1", std::vector<int> {3}, 4);
-    bottomFeeder* p2 = new bottomFeeder("p2", std::vector<int> {3}, 4);
-    bottomFeeder* p3 = new bottomFeeder("p3", std::vector<int> {3}, 4);
-    EVtrader* p4 = new EVtrader("p4");
+    Noisy* p1 = new Noisy("p1");
+    Noisy* p2 = new Noisy("p2");
+    bottomFeeder* p3 = new bottomFeeder("p3", std::vector<int> {0,1,3}, 2);
+    // EVtrader* p2 = new EVtrader("p2");
+    // EVtrader* p3 = new EVtrader("p3");
+    Noisy* p4 = new Noisy("p4");
+    // EVtrader* p4 = new EVtrader("p4");
 
     Deck newDeck = Deck();
 
@@ -56,14 +57,15 @@ int main() {
         if (currentTime >= p1look) {
             eventCount++;
             p1look += expDist(gen);
-            // p1->strategy(books);
-            p1->strategy(books, players);
+            books[0]->addOrder(new Order(p1, 2, 0, 0));
+            p1->strategy(books);
+            // p1->strategy(books, players);
         }
         if (currentTime >= p2look) {
             eventCount++;
             p2look += expDist(gen);
-            // p2->strategy(books);
-            p2->strategy(books, players);
+            p2->strategy(books);
+            // p2->strategy(books, players);
         }
         if (currentTime >= p3look) {
             eventCount++;
@@ -74,7 +76,8 @@ int main() {
         if (currentTime >= p4look) {
             eventCount++;
             p4look += expDist(gen);
-            p4->strategy(books, players);
+            // p4->strategy(books, players);
+            p4->strategy(books);
         }
         currentTime += 0.01;
         

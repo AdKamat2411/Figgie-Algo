@@ -1,8 +1,8 @@
 #ifndef EVTRADER_H
 #define EVTRADER_H
 
-#include "player.h"
-#include "orderbook.h"
+#include "../Mechanics/player.h"
+#include "../Mechanics/orderbook.h"
 #include "probability.h"
 #include <vector>
 

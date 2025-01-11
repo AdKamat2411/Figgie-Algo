@@ -11,17 +11,22 @@ void bottomFeeder::strategy(std::vector<orderBook*> books, std::vector<Player* >
             sum += getAvgPrice(players, x, books[bookNum]);
         }
         float eXprice = sum / playerIdx.size();
+        // cout << "eXprice is " << eXprice << endl;
 
-        bool direction = makeDecision();
-        if (direction == 0) {
-            float limitBuyPrice = std::min(eXprice, books[bookNum]->getBestAskPrice());
-            Order* buyOrder = new Order(this, limitBuyPrice, 0, bookNum);
-            books[bookNum]->addOrder(buyOrder);
-        } else {
-            float limitSellPrice = std::max(eXprice, books[bookNum]->getBestBidPrice());
-            Order* buyOrder = new Order(this, limitSellPrice, 1, bookNum);
-            books[bookNum]->addOrder(buyOrder);
+        
+        if (eXprice != 0) {
+            bool direction = makeDecision();
+            if (direction == 0) {
+                float limitBuyPrice = std::min(eXprice, books[bookNum]->getBestAskPrice());
+                Order* buyOrder = new Order(this, limitBuyPrice, 0, bookNum);
+                books[bookNum]->addOrder(buyOrder);
+            } else {
+                float limitSellPrice = std::max(eXprice, books[bookNum]->getBestBidPrice());
+                Order* buyOrder = new Order(this, limitSellPrice, 1, bookNum);
+                books[bookNum]->addOrder(buyOrder);
+            }
         }
+        
     }
     
 }
@@ -40,9 +45,15 @@ float bottomFeeder::getAvgPrice(std::vector<Player* > players, int Idx, orderBoo
         }
     }
 
+    // cout << "buyPrices size: " << buyPrices.size() << endl;
+    // cout << "sellPrices size: " << sellPrices.size() << endl;
+
+
     if (buyPrices.size() < pastTrades || sellPrices.size() < pastTrades) {
         return 0;
     }
+
+    
 
     std::vector<float> recentBuyPrices(buyPrices.end() - pastTrades, buyPrices.end());
     std::vector<float> recentSellPrices(sellPrices.end() - pastTrades, sellPrices.end());

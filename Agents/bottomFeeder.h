@@ -2,8 +2,8 @@
 #define BOTTOMFEEDER_H
 
 #include <iostream>
-#include "player.h"
-#include "orderbook.h"
+#include "../Mechanics/player.h"
+#include "../Mechanics/orderbook.h"
 #include "probability.h"
 
 

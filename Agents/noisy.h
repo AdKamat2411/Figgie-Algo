@@ -1,8 +1,8 @@
 #ifndef NOISY_H
 #define NOISY_H
 
-#include "player.h"
-#include "orderbook.h"
+#include "../Mechanics/player.h"
+#include "../Mechanics/orderbook.h"
 #include <vector>
 
 class Noisy: public Player {
